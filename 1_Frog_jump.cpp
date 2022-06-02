@@ -45,6 +45,23 @@ int solve_itarative(int n) {
     return dp[n-1];
 }
 
+int solve_itarative_spaceOptimized(int n) {
+    int prev_1 = 0, prev_2 = 0, current;
+
+    for (int i = 1; i < n; ++i) {
+        int left = prev_1 + abs(a[i] - a[i-1]);
+        int right = INT_MAX;
+        if (i-2 >= 0) {
+            right = prev_2 + abs(a[i] - a[i-2]);
+        }
+
+        current = min(left, right);
+        prev_2 = prev_1;
+        prev_1 = current;
+    }
+    return prev_1;
+}
+
 int main() {
     a = { 30, 10, 60, 10, 60, 50 };
     int n = a.size();
@@ -52,6 +69,7 @@ int main() {
 
     cout << "recursive:  " << solve(n-1) << "\n";
     cout << "tabulation: " << solve_itarative(n) << "\n";
+    cout << "space optm: " << solve_itarative_spaceOptimized(n) << "\n";
 
     return 0;
 }
