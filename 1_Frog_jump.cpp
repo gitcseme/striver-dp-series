@@ -27,9 +27,7 @@ int solve(int i) {
         right = solve(i-2) + abs(a[i] - a[i-2]);
     }
 
-    mem[i] = min(left, right);
-
-    return mem[i];
+    return mem[i] = min(left, right);
 }
 
 /* Bottom-up
@@ -87,8 +85,7 @@ int solve_k_jump(int i, int k) {
         }
     }
 
-    mem[i] = min_jmp;
-    return mem[i];
+    return mem[i] = min_jmp;
 }
 
 /* k-jump iterative
@@ -116,12 +113,12 @@ int main() {
     int n = a.size();
     mem.resize(n, -1);
 
-    cout << "recursive:  " << solve(n-1) << "\n";
+    cout << "memorization:  " << solve(n-1) << "\n";
     cout << "tabulation: " << solve_itarative(n) << "\n";
     cout << "space optm: " << solve_itarative_spaceOptimized(n) << "\n";
 
     mem.resize(n, -1);
-    cout << "recursive_k: " << solve_k_jump(n-1, 3) << "\n";
+    cout << "memorization_k: " << solve_k_jump(n-1, 3) << "\n";
     cout << "tabulation_k: " << solve_k_jump_iterative(n, 3);
 
     return 0;
