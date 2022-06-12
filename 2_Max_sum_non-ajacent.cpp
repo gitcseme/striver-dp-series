@@ -26,4 +26,6 @@ int main() {
     mem.resize(n, -1);
 
     cout << "memorization: " << solve(n-1) << "\n";
+
+    return 0;
 }
