@@ -19,6 +19,9 @@ int getMaxWithout(int last) {
     return maxp;
 }
 
+/* TC -> O(n*4) * 3
+ * SC -> O(n) + O(n*4)
+*/
 int solve(int day, int last) {
     if (day == 0) return getMaxWithout(last);
 
@@ -34,6 +37,24 @@ int solve(int day, int last) {
     return mem[day][last] = maxPoints;
 }
 
+int solve_tabulation(int n) {
+    vector<vector<int>> dp(n, vector<int>(4));
+    for (int task = 0; task <= 3; ++task) dp[0][task] = getMaxWithout(task);
+
+    for (int day = 1; day < n; ++day) {
+        for (int last = 0; last < 4; ++last) {
+            int maxPoints = 0;
+            for (int task = 0; task < 3; ++task) {
+                if (task == last) continue;
+                int points = a[day][task] + solve(day-1, task);
+                maxPoints = max(maxPoints, points);
+            }
+            dp[day][last] = maxPoints;
+        }
+    }
+    return dp[n-1][3];
+}
+
 int main() {
     n = 4;
     mem.resize(n, vector<int>(4, -1));
@@ -45,6 +66,7 @@ int main() {
     };
 
     cout << "memorization: " << solve(n-1, 3) << "\n";
+    cout << "tabulation: " << solve_tabulation(n) << "\n";
 
     return 0;
 }
