@@ -12,7 +12,6 @@ vector<vector<int>> mem;
  * TC -> O(n*target)
  * SC -> O(n*target) mem array + O(n) stack space
 */
-
 bool solve(int i, int target) {
     if (target == 0) return true;
     if (i == 0) return a[0] == target;
@@ -51,13 +50,44 @@ bool solve_tabulation(int n, int k) {
     return dp[n-1][k];
 }
 
+int min_abs_diff_2subset(int n) {
+    int total = accumulate(a.begin(), a.end(), 0);
+    int k = total / 2;
+
+    vector<vector<bool>> dp(n, vector<bool>(k+1, false));
+    for (int i = 0; i < n; ++i) dp[i][0] = true;
+    dp[0][a[0]] = true;
+
+    for (int i = 1; i < n; ++i) {
+        for (int target = 1; target <= k; ++target) {
+            int not_taken = dp[i-1][target];
+            int taken = false;
+            if (!not_taken && target >= a[i]) {
+                taken = dp[i-1][target-a[i]];
+            }
+
+            dp[i][target] = (int)(not_taken || taken);
+        }
+    }
+    
+    int min_diff = k + 1;
+    for (int i = 0; i <= k; ++i) {
+        if (dp[n-1][i])
+            min_diff = min(min_diff, abs(total - i));
+    }
+
+    return min_diff;
+}
+
 int main()
 {
-    a = { 1, 3, 4, 6, 2, 1 };
-    int target = 19;
+    a = { 3, 2, 7 };
+    int target = 9;
     int n = a.size();
     mem.resize(n, vector<int>(target+1, -1));
 
     cout << "memorization: " << solve(n-1, target) << "\n";
-    cout << "tabulation: " << solve_tabulation(n, target) << "\n";
+    cout << "tabulation: " << solve_tabulation(n, target) << "\n\n";
+
+    cout << "Minumum subset diff: " << min_abs_diff_2subset(n) << "\n";
 }
