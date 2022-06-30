@@ -28,6 +28,29 @@ int solve(int i, int W) {
     return mem[i][W] = max(not_taken, taken);
 }
 
+/* Tabulation
+ * TC -> O(n * W)
+ * SC -> O(n * W) mem array
+*/
+int solve_tabulation(int n, int W) {
+    vector<vector<int>> dp(n, vector<int>(W+1, 0));
+    for (int w = 0; w <= W; ++w) 
+        dp[0][w] = w < wt[0] ? 0 : price[0];
+
+    for (int i = 1; i < n; ++i) {
+        for (int w = 0; w <= W; ++w) {
+            int not_taken = dp[i-1][w];
+            int taken = INT_MIN;
+            if (wt[i] <= w)
+                taken = price[i] + dp[i-1][w - wt[i]];
+
+            dp[i][w] = max(not_taken, taken);
+        }
+    }
+
+    return dp[n-1][W];
+}
+
 int main() {
     wt = { 3, 2, 5 };
     price = { 30, 40, 60 };
@@ -37,4 +60,5 @@ int main() {
     mem.resize(n, vector<int>(W+1, -1));
 
     cout << "memorization: " << solve(n-1, W) << "\n";
+    cout << "tabulation: " << solve_tabulation(n, W) << "\n";
 }
