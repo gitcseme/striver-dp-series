@@ -51,6 +51,30 @@ int solve_tabulation(int n, int W) {
     return dp[n-1][W];
 }
 
+/* Tabulation optimized
+ * TC -> O(n * W)
+ * SC -> O(W)
+*/
+int sovle_tabulation_spaceOptimized(int n, int W) {
+    vector<int> prev(W+1, 0), cur(W+1, 0);
+    for (int w = 0; w <= W; ++w) 
+        prev[w] = w < wt[0] ? 0 : price[0];
+
+    for (int i = 1; i < n; ++i) {
+        for (int w = 0; w <= W; ++w) {
+            int not_taken = prev[w];
+            int taken = INT_MIN;
+            if (wt[i] <= w)
+                taken = price[i] + prev[w - wt[i]];
+
+            cur[w] = max(not_taken, taken);
+        }
+        prev = cur;
+    }
+
+    return prev[W];
+}
+
 int main() {
     wt = { 3, 2, 5 };
     price = { 30, 40, 60 };
@@ -61,4 +85,5 @@ int main() {
 
     cout << "memorization: " << solve(n-1, W) << "\n";
     cout << "tabulation: " << solve_tabulation(n, W) << "\n";
+    cout << "tabulation space opt: " << sovle_tabulation_spaceOptimized(n, W) << "\n";
 }
