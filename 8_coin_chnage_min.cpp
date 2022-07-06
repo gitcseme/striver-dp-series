@@ -6,6 +6,7 @@
 using namespace std;
 
 vector<int> coins;
+vector<int> a;
 vector<vector<int>> mem;
 
 /* Recursion
@@ -61,14 +62,45 @@ int solve_tabulation(int n, int T) {
     return dp[n-1][T];
 }
 
+/* Recursion
+ * TC -> exponential O(c^n) : where c is variable -> much bigger than O(2^n)
+ * SC -> O(target)
+ * 
+ * Memerization
+ * TC -> O(n * target)
+ * Sc -> O(n * target) mem array + O(target) stack space
+*/
+int solve_count(int i, int target) {
+    if (i == 0)
+        return (target%a[0] == 0);
+
+    if (mem[i][target] != -1) return mem[i][target];
+
+    int not_taken = solve_count(i-1, target);
+    int taken = 0;
+    if (a[i] <= target) {
+        taken = solve_count(i, target - a[i]);
+    }
+
+    return mem[i][target] = not_taken + taken;
+}
+
+
+
 int main() {
     coins = { 9, 6, 5, 1 };
     int n = coins.size();
     int target = 11;
     mem.resize(n, vector<int>(target+1, -1));
 
-    cout << solve(n-1, target) << "\n";
-    cout << solve_tabulation(n, target) << "\n";
+    cout << "memorization: " << solve(n-1, target) << "\n";
+    cout << "tabulation: " << solve_tabulation(n, target) << "\n";
+
+    a =  { 1, 2, 3 };
+    n = a.size();
+    target = 4;
+    fill(mem.begin(), mem.end(), vector<int>(target+1, -1));
+    cout << "total ways: " << solve_count(n-1, target) << "\n";
 
     return 0;
 }
