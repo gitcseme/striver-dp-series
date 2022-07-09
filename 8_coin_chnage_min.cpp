@@ -85,7 +85,24 @@ int solve_count(int i, int target) {
     return mem[i][target] = not_taken + taken;
 }
 
+int solve_count_tabulation(int n, int T) {
+    vector<vector<int>> dp(n, vector<int>(T+1, -1));
+    for (int t = 0; t <= T; ++t) dp[0][t] = (int)(t%a[0] == 0);
 
+    for (int i = 1; i < n; ++i) {
+        for (int target = 0; target <= T; ++target) {
+            int not_taken = dp[i-1][target];
+            int taken = 0;
+            if (a[i] <= target) {
+                taken = dp[i][target - a[i]];
+            }
+
+            dp[i][target] = not_taken + taken;        
+        }
+    }
+
+    return dp[n-1][T];
+}
 
 int main() {
     coins = { 9, 6, 5, 1 };
@@ -101,6 +118,7 @@ int main() {
     target = 4;
     fill(mem.begin(), mem.end(), vector<int>(target+1, -1));
     cout << "total ways: " << solve_count(n-1, target) << "\n";
+    cout << "total ways tabulation: " << solve_count_tabulation(n, target) << "\n";
 
     return 0;
 }
