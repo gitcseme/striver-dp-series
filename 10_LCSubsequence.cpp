@@ -34,7 +34,7 @@ void printLCS(vector<vector<int>> &dp, int i, int j) {
  * SC -> O(n * m) + O(n+m) stack space
 */
 int solve(int i, int j) {
-    if (i < 0 | j < 0) return 0;
+    if (i < 0 || j < 0) return 0;
 
     if (mem[i][j] != -1) return mem[i][j];
 
