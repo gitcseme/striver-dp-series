@@ -13,24 +13,19 @@ vector<vector<int>> mem;
  * TC -> O(n*2)
  * SC -> O(n) O(n) auxiliary stack space
 */
-int solve(int i, int bought) {
+int solve(int i, int buy) {
     if (i == n) return 0;
+    if (mem[i][buy] != -1) return mem[i][buy];
 
-    if (mem[i][bought] != -1) return mem[i][bought];
-
-    int profit;
-    if (!bought) {
-        int buy = -prices[i] + solve(i+1, 1);
-        int not_buy = solve(i+1, 0);
-        profit = max(buy, not_buy);
+    int profit = 0;
+    if (buy) {
+        profit = max(-prices[i] + solve(i+1, 0), solve(i+1, 1));
     }
     else {
-        int sell = prices[i] + solve(i+1, 0);
-        int not_sell = solve(i+1, 1);
-        profit = max(sell, not_sell);
+        profit = max(prices[i] + solve(i+1, 1), solve(i+1, 0));
     }
 
-    return mem[i][bought] = profit;
+    return mem[i][buy] = profit;
 }
 
 int main() {
@@ -38,5 +33,5 @@ int main() {
     n = prices.size();
     mem.resize(n, vector<int>(2, -1));
 
-    cout << solve(0, 0) << "\n";
+    cout << solve(0, 1) << "\n";
 }
