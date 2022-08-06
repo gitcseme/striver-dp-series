@@ -28,6 +28,10 @@ int solve(int i, int buy) {
     return mem[i][buy] = profit;
 }
 
+/* Tabulation:
+ * TC -> O(n*2)
+ * SC -> O(n) O(n) auxiliary stack space
+*/
 int sovle_tabulation(int n) {
     vector<vector<int>> dp(n+1, vector<int>(2, 0));
     dp[n][0] = dp[n][1] = 0;
