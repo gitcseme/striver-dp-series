@@ -53,6 +53,22 @@ int solve_tabulation(int n) {
     return dp[0][0];
 }
 
+int LIS_binary_search() {
+    int n = a.size();
+    vector<int> tmp = { a[0] };
+
+    for (int i = 1; i < n; ++i) {
+        if (a[i] > tmp.back()) {
+            tmp.push_back(a[i]);
+        }
+        else {
+            int idx = lower_bound(tmp.begin(), tmp.end(), a[i]) - tmp.begin();
+            tmp[idx] = a[i];
+        }
+    }
+    return tmp.size();
+}
+
 int main() {
     a = { 10, 9, 2, 5, 3, 7, 101, 18 };
     n = a.size();
@@ -61,4 +77,5 @@ int main() {
     cout << solve(0, -1) << "\n";
     cout << solve2(0, -1) << "\n";
     cout << solve_tabulation(n)<< "\n";
+    cout << LIS_binary_search()<< "\n";
 }
