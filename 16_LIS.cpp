@@ -7,7 +7,7 @@ vector<vector<int>> mem;
 
 /* Recursion:
  * TC -> O(2^n)
- * SC -> O(n) auxiliary stack space
+ * SC -> O(n + n) auxiliary stack space
 */
 int solve(int i, int prev) {
     if (i == n) return 0;
@@ -53,6 +53,10 @@ int solve_tabulation(int n) {
     return dp[0][0];
 }
 
+/* binary search 
+ * TC -> O(n * log(n))
+ * SC -> O(n)
+*/
 int LIS_binary_search() {
     int n = a.size();
     vector<int> tmp = { a[0] };
@@ -69,6 +73,23 @@ int LIS_binary_search() {
     return tmp.size();
 }
 
+int LIS_Itarative() {
+    int n = a.size();
+    vector<int> dp(n, 1);
+
+    int maxi = 1;
+    for (int i = 1; i < n; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (a[j] < a[i]) {
+                dp[i] = max(dp[i], 1 + dp[j]);
+            }
+            maxi = max(maxi, dp[i]);
+        }
+    }
+
+    return maxi;
+}
+
 int main() {
     a = { 10, 9, 2, 5, 3, 7, 101, 18 };
     n = a.size();
@@ -78,4 +99,5 @@ int main() {
     cout << solve2(0, -1) << "\n";
     cout << solve_tabulation(n)<< "\n";
     cout << LIS_binary_search()<< "\n";
+    cout << LIS_Itarative()<< "\n";
 }
