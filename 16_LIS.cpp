@@ -73,21 +73,36 @@ int LIS_binary_search() {
     return tmp.size();
 }
 
-int LIS_Itarative() {
+vector<int> path;
+pair<int, vector<int>> LIS_Itarative() {
     int n = a.size();
     vector<int> dp(n, 1);
+    path.resize(n);
 
-    int maxi = 1;
-    for (int i = 1; i < n; ++i) {
+    int maxi = 1, max_ind = 0;
+
+    for (int i = 0; i < n; ++i) {
+        path[i] = i;
+
         for (int j = 0; j < i; ++j) {
-            if (a[j] < a[i]) {
-                dp[i] = max(dp[i], 1 + dp[j]);
+            if (a[j] < a[i] && 1 + dp[j] > dp[i]) {
+                dp[i] = 1 + dp[j];
+                path[i] = j;
             }
-            maxi = max(maxi, dp[i]);
+            if (dp[i] > maxi) {
+                maxi = dp[i];
+                max_ind = i;
+            }
         }
     }
 
-    return maxi;
+    vector<int> lis = { a[max_ind] };
+    while (path[max_ind] != max_ind) {
+        max_ind = path[max_ind];
+        lis.push_back(a[max_ind]);
+    }
+    reverse(lis.begin(), lis.end());
+    return { maxi, lis };
 }
 
 int main() {
@@ -99,5 +114,11 @@ int main() {
     cout << solve2(0, -1) << "\n";
     cout << solve_tabulation(n)<< "\n";
     cout << LIS_binary_search()<< "\n";
-    cout << LIS_Itarative()<< "\n";
+    
+    pair<int, vector<int>> data = LIS_Itarative();
+    cout << data.first << "\n";
+    for(int x : data.second) {
+        cout << x << " ";
+    }
+    cout << "\n";
 }
