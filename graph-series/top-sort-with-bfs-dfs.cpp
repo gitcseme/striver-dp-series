@@ -1,7 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// For top sort the graph should be a [DAG]
+/**
+ * Topological sort: Operates only on DAG => Directed Acyclic Graph
+ * Def: If there is an edge u --> v  then in top sort u should appear before v
+*/
+
 int n = 6;
 vector<vector<int>> g(n);
 vector<int> vis(n, 0);
@@ -19,6 +23,8 @@ void dfsTopSort(int u) {
 }
 
 // Kahn's algo with BFS
+// If there is a cycle topSorted.length != n  [Always true]
+// If top sort is not possible there is a CYCLE in Graph
 vector<int> indegree(n, 0);
 
 vector<int> bfsTopSort() {
