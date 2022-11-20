@@ -2,6 +2,11 @@
 using namespace std;
 typedef pair<int, pair<int, int>> pipii;
 
+/**
+ * Intuition: Sort the edges in ascending order 
+ * now take one by one & start connecting.
+*/
+
 vector<pipii> edges;
 
 int n = 7;
