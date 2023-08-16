@@ -2,7 +2,7 @@
 using namespace std;
 
 /**
- * Height (Left subtree) ~ Height (Right subtree) <= 1
+ * maxi = max( maxi, lh+rh ) for each node
 */
 
 class TreeNode {
